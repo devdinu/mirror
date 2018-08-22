@@ -8,13 +8,16 @@ import (
 	"net/http"
 )
 
-func HTTPMirror(w http.ResponseWriter, r *http.Request) {
-	b, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		log.Println("[Handler] Error reading body")
+func HTTPMirror() http.Handler {
+	f := func(w http.ResponseWriter, r *http.Request) {
+		b, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			log.Println("[Handler] Error reading body")
+		}
+		data := string(b)
+		fmt.Printf("Url:\t\t%v\nMethod:\t\t%s\nHeaders:\n%s\nBody:\n%s\n\n", r.URL, r.Method, headerString(r.Header), data)
 	}
-	data := string(b)
-	fmt.Printf("Url:\t\t%v\nMethod:\t\t%s\nHeaders:\n%s\nBody:\n%s\n\n", r.URL, r.Method, headerString(r.Header), data)
+	return http.HandlerFunc(f)
 }
 
 func headerString(hdrs http.Header) string {

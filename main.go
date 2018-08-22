@@ -1,12 +1,13 @@
 package main
 
-import "flag"
+import "github.com/devdinu/mirror/config"
 
+//TODO: move it to cmd/mirror package
 func main() {
-	port := flag.Int("port", 8080, "port to run the mirror server")
-	flag.Parse()
-
-	if err := start(Config{Port: *port}); err != nil {
+	if err := config.Load(); err != nil {
+		panic(err)
+	}
+	if err := start(config.Address()); err != nil {
 		panic(err)
 	}
 }

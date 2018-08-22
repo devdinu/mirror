@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/devdinu/mirror/config"
 )
 
 type Config struct {
@@ -13,9 +15,13 @@ func (c Config) Address() string {
 	return fmt.Sprintf(":%d", c.Port)
 }
 
-func start(cfg Config) error {
-	addr := cfg.Address()
+func start(addr string) error {
 	fmt.Println("Listening for requests", addr)
-	http.HandleFunc("/", HTTPMirror)
+	handler := HTTPMirror()
+	handler = filter(
+		anyMatcher(hasMethod(config.Methods())),
+		handler)
+
+	http.Handle("/", handler)
 	return http.ListenAndServe(addr, nil)
 }
