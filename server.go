@@ -18,9 +18,13 @@ func (c Config) Address() string {
 func start(addr string) error {
 	fmt.Println("Listening for requests", addr)
 	handler := HTTPMirror()
-	handler = filter(
-		anyMatcher(hasMethod(config.Methods())),
-		handler)
+	var predicates []predicate
+	if len(config.Methods()) != 0 {
+		predicates = append(predicates, hasMethod(config.Methods()))
+	}
+	if len(predicates) != 0 {
+		handler = filter(anyMatcher(predicates...), handler)
+	}
 
 	http.Handle("/", handler)
 	return http.ListenAndServe(addr, nil)

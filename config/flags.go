@@ -36,5 +36,8 @@ func Methods() []string {
 func filterMethods(methods string) []string {
 	//TODO: validate the methods and return error
 	// add cases for matching http.MethodGet
+	if methods == "" {
+		return []string{}
+	}
 	return strings.Split(methods, ",")
 }

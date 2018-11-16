@@ -1,6 +1,8 @@
 package main
 
-import "github.com/devdinu/mirror/config"
+import (
+	"github.com/devdinu/mirror/config"
+)
 
 //TODO: move it to cmd/mirror package
 func main() {
