@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/devdinu/mirror/config"
+	"github.com/devdinu/mirror/proxy"
 )
 
 type Config struct {
@@ -24,6 +25,13 @@ func start(addr string) error {
 	}
 	if len(predicates) != 0 {
 		handler = filter(anyMatcher(predicates...), handler)
+	}
+
+	proxies := config.Proxies()
+	if len(proxies) > 0 {
+		for _, pc := range proxies {
+			handler = proxy.New(pc, handler)
+		}
 	}
 
 	http.Handle("/", handler)

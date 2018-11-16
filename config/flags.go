@@ -11,6 +11,11 @@ type config struct {
 	methods []string
 }
 
+type Proxy struct {
+	MatchingUrl string
+	Backend     string
+}
+
 var cfg config
 
 func Load() error {
@@ -40,4 +45,11 @@ func filterMethods(methods string) []string {
 		return []string{}
 	}
 	return strings.Split(methods, ",")
+}
+
+func Proxies() []Proxy {
+	return []Proxy{
+		{MatchingUrl: ".*/static/.*", Backend: "http://localhost:8888"},
+		{MatchingUrl: ".*/log/.*", Backend: "http://localhost:8081"},
+	}
 }
