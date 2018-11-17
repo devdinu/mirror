@@ -2,6 +2,7 @@ package proxy
 
 import (
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"regexp"
 
@@ -25,10 +26,13 @@ func New(pc config.Proxy, next http.Handler) http.Handler {
 		fmt.Printf("[Proxy] matching url: %s with %s\n", r.URL.Path, p.urlRegex)
 		if p.urlRegex.MatchString(r.URL.Path) {
 			servReq, _ := http.NewRequest(r.Method, p.backend, r.Body)
-			_, err := p.client.Do(servReq)
+			resp, err := p.client.Do(servReq)
 			if err != nil {
 				fmt.Printf("[Proxy] proxying error: %v\n", err)
 			}
+			w.WriteHeader(resp.StatusCode)
+			data, _ := ioutil.ReadAll(resp.Body)
+			w.Write(data)
 		} else {
 			p.next.ServeHTTP(w, r)
 		}
