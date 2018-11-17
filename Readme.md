@@ -5,6 +5,10 @@ An echo server you could run locally to view the request data. You could add fil
 `-port - port to run application`
 `-methods GET,PUT,DELETE,POST`  customize what methods to log, will be adding filter based on url, body, headers.
 
+This is similar to hookbin, https://hookb.in/b9ONNWPLMoFNeLz1NoLL where we can inspect the requests.
+like https://devdinu.free.beeceptor.com where we can proxy with rules. We can't use the above in prod systems as we've privacy concern. This lets us do it locally.
+
+
 This lib is still in development.
 
 ## Running
@@ -37,3 +41,4 @@ This service could be extended to
 * redirecting requests matching url (eg: read servives, and write service separately)
 * Redirect requests to temporary cluster when failure in existing backends
 
+[Screencast Video](https://youtu.be/H_Sk4xxKJkg)
